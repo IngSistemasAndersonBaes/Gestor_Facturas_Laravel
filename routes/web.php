@@ -43,10 +43,19 @@ Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf']
 
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
 
-Route::middleware('guest')->group(function () {
-    // Definimos el login AQUÍ MISMO para obligar a que funcione
-    Volt::route('/login', 'auth.login')->name('login');
+// --- 1. RUTA DE EMERGENCIA (Para arreglar el error 404) ---
+Route::get('/fix-404', function() {
+    Artisan::call('optimize:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:clear');
+    return "<h1>✅ SISTEMA REPARADO: Caché borrada. Intenta entrar al Login ahora.</h1>";
 });
-// ---------------------------------------------
+
+// --- 2. RUTA MANUAL DE LOGIN (Para asegurar que funcione) ---
+Route::middleware('guest')->group(function () {
+    // Apuntamos directamente a 'auth.login' que es tu carpeta real
+    Volt::route('login', 'auth.login')->name('login');
+});
 
 require __DIR__.'/auth.php';
