@@ -1,8 +1,4 @@
 <?php
-// --- PRUEBA DE VIDA ---
-if ($_SERVER['REQUEST_URI'] === '/prueba-laravel') {
-    die("<h1>¡VIVO! Nginx me encontró. El problema es interno de Laravel.</h1>");
-}
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
