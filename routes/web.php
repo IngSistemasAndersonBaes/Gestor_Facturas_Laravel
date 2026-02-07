@@ -44,3 +44,9 @@ Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf']
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
 
 require __DIR__.'/auth.php';
+
+Route::get('/ver-rutas', function () {
+    $output = new \Symfony\Component\Console\Output\BufferedOutput();
+    Artisan::call('route:list', [], $output);
+    return '<pre>' . $output->fetch() . '</pre>';
+});
