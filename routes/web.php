@@ -43,3 +43,15 @@ Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf']
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
 
 require __DIR__.'/auth.php';
+
+// --- RUTA SECRETA PARA SEMBRAR LA BASE DE DATOS ---
+Route::get('/sembrar-datos', function() {
+    try {
+        // Ejecuta el comando db:seed a la fuerza
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        return "<h1>✅ ¡ÉXITO! Base de datos sembrada correctamente.</h1>";
+    } catch (\Exception $e) {
+        // Si falla (por ejemplo, si ya existen los datos), nos muestra el error
+        return "<h1>⚠️ Ocurrió un error (¿Quizás ya existen los datos?):</h1><p>" . $e->getMessage() . "</p>";
+    }
+});
