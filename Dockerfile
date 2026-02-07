@@ -1,21 +1,25 @@
 FROM richarvey/nginx-php-fpm:latest
 
-# Copiamos todo tu código al contenedor
+# Copiamos todo el código
 COPY . .
 
-# Variables de entorno críticas
+# Configuraciones Críticas
 ENV WEBROOT /var/www/html/public
-ENV SKIP_COMPOSER 0
 ENV PHP_ERRORS_STDERR 1
 ENV APP_ENV production
 ENV APP_DEBUG true
 ENV LOG_CHANNEL stderr
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# --- CORRECCIÓN ---
-# Ejecutamos la instalación de dependencias AQUÍ MISMO para asegurar que existan
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-# ------------------
+# --- LA CLAVE DEL ÉXITO ---
+# 1. Aseguramos que SKIP_COMPOSER sea 0 para que NO se salte la instalación si falla el paso manual
+ENV SKIP_COMPOSER 0
 
-# Comando Nuclear: Borra físicamente la caché, migra y arranca
-CMD ["/bin/sh", "-c", "rm -f /var/www/html/bootstrap/cache/*.php && php artisan migrate --force && /start.sh"]
+# 2. Instalamos las librerías manualmente AHORA MISMO
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# 3. Permisos correctos (Para que Nginx pueda leer los archivos)
+RUN chown -R www-data:www-data /var/www/html
+
+# 4. Comando de arranque: Borra caché, migra BD y enciende
+CMD ["/bin/sh", "-c", "php artisan optimize:clear && php artisan migrate --force && /start.sh"]
