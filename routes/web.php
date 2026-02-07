@@ -43,4 +43,10 @@ Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf']
 
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
 
+Route::middleware('guest')->group(function () {
+    // Definimos el login AQUÍ MISMO para obligar a que funcione
+    Volt::route('/login', 'auth.login')->name('login');
+});
+// ---------------------------------------------
+
 require __DIR__.'/auth.php';
