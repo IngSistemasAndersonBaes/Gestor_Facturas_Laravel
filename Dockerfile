@@ -11,13 +11,15 @@ ENV APP_DEBUG true
 ENV LOG_CHANNEL stderr
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# 1. Instalar dependencias
+# 1. Instalar librerías
 RUN composer install --no-dev --optimize-autoloader
 
-# 2. BORRADO FÍSICO DE CACHÉ (Nuclear)
-# Eliminamos los archivos que "atoran" a Laravel
-RUN rm -f /var/www/html/bootstrap/cache/*.php
+# 2. INYECTAR NUESTRA CONFIGURACIÓN DE NGINX (La Solución)
+# Esto sobrescribe la configuración por defecto que está fallando
+COPY nginx.conf /etc/nginx/sites-available/default.conf
+# Aseguramos que Nginx la lea
+RUN ln -sf /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
-# 3. ARRANQUE
-# Publicamos los assets que faltaban en tus logs y arrancamos
-CMD ["/bin/sh", "-c", "php artisan livewire:publish --assets && php artisan vendor:publish --tag=flux:assets --force && php artisan route:clear && php artisan view:clear && /start.sh"]
+# 3. Arranque "Todo en Uno"
+# Publicamos Assets + Borramos Caché + Migramos BD + Iniciamos
+CMD ["/bin/sh", "-c", "php artisan vendor:publish --tag=flux:assets --force && php artisan livewire:publish --assets && php artisan optimize:clear && php artisan migrate --force && /start.sh"]
