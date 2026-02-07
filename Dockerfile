@@ -1,16 +1,20 @@
 FROM richarvey/nginx-php-fpm:latest
 
+# Copiamos todo tu código al contenedor
 COPY . .
 
-# Configuraciones para Laravel
+# Variables de entorno críticas
 ENV WEBROOT /var/www/html/public
 ENV SKIP_COMPOSER 0
 ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
 ENV APP_ENV production
-ENV APP_DEBUG false
+ENV APP_DEBUG true
 ENV LOG_CHANNEL stderr
 ENV COMPOSER_ALLOW_SUPERUSER 1
+
+# --- CORRECCIÓN ---
+# Ejecutamos la instalación de dependencias AQUÍ MISMO para asegurar que existan
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+# ------------------
 
 CMD ["/start.sh"]
