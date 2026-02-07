@@ -1,45 +1,36 @@
 <?php
 
-use App\Http\Controllers\Admin\FactuController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\Admin\FactuController;
 use App\Http\Controllers\Admin\InventarioController;
 
+// 1. Redirección inicial
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/factus', [FactuController::class, 'index'])->name('factus.index');
-
-/* Ruta para el pdf */
-Route::get('/admin/factus/pdf', [App\Http\Controllers\Admin\FactuController::class, 'generatePdf'])->name('admin.factus.pdf.test');
-
-
+// 2. Dashboard
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
-
-    Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
-    Volt::route('settings/password', 'settings.password')->name('settings.password');
-    Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-
-    Route::get('/dashboard/stats', function () {
-        return response()->json([
-            'facturas' => \App\Models\Factu::count(),
-            'inventario' => \App\Models\Inventario::count(),
-        ]);
-    })->name('dashboard.stats');
-});
-
-/* ruta para archivo excel  */
+// 3. Tus Controladores
+Route::get('/factus', [FactuController::class, 'index'])->name('factus.index');
 Route::get('admin/inventarios/excel', [InventarioController::class, 'exportExcel'])->name('admin.inventarios.excel');
-
-// Ruta para exportar PDF de inventario
 Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf'])->name('admin.inventarios.pdf');
-
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
 
-require __DIR__.'/auth.php';
+// --- 4. RUTAS DE AUTENTICACIÓN (PEGADAS DIRECTAMENTE AQUÍ) ---
+// Esto elimina cualquier error de lectura de archivo
+Route::middleware('guest')->group(function () {
+    Volt::route('login', 'auth.login')->name('login');
+    Volt::route('register', 'auth.register')->name('register');
+    Volt::route('forgot-password', 'auth.forgot-password')->name('password.request');
+    Volt::route('reset-password/{token}', 'auth.reset-password')->name('password.reset');
+});
+
+Route::middleware('auth')->group(function () {
+    Volt::route('verify-email', 'auth.verify-email')->name('verification.notice');
+    Volt::route('confirm-password', 'auth.confirm-password')->name('password.confirm');
+});
