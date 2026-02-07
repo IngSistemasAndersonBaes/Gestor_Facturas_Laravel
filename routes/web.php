@@ -45,7 +45,7 @@ Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name
 require __DIR__.'/auth.php';
 
 // --- RUTA PARA VER USUARIOS REGISTRADOS ---
-Route::get('/ver-usuarios', function() {
+/* Route::get('/ver-usuarios', function() {
     try {
         // Busca todos los usuarios en la base de datos
         $usuarios = \App\Models\User::all();
@@ -61,10 +61,10 @@ Route::get('/ver-usuarios', function() {
     } catch (\Exception $e) {
         return "Error al conectar con la BD: " . $e->getMessage();
     }
-});
+}); */
 
 // --- RUTA PARA EJECUTAR SEEDERS MANUALMENTE ---
-Route::get('/sembrar-ahora', function() {
+/* Route::get('/sembrar-ahora', function() {
     try {
         // Ejecutamos el comando db:seed a la fuerza
         \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
@@ -72,4 +72,4 @@ Route::get('/sembrar-ahora', function() {
     } catch (\Exception $e) {
         return "<h1>❌ Error:</h1><p>" . $e->getMessage() . "</p>";
     }
-});
+}); */
