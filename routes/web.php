@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\FactuController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\Admin\InventarioController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,5 +42,15 @@ Route::get('admin/inventarios/excel', [InventarioController::class, 'exportExcel
 Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf'])->name('admin.inventarios.pdf');
 
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
+
+Route::get('/forzar-migracion', function () {
+    // 1. Ejecutar las migraciones
+    Artisan::call('migrate', ['--force' => true]);
+    
+    // (Opcional) 2. Limpiar caché por si acaso
+    Artisan::call('optimize:clear');
+
+    return '<h1>¡ÉXITO! Migraciones ejecutadas correctamente.</h1> <a href="/">Volver al inicio</a>';
+});
 
 require __DIR__.'/auth.php';
