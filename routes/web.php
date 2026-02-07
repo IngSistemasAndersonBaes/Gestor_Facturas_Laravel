@@ -35,4 +35,9 @@ Route::middleware('auth')->group(function () {
     Volt::route('confirm-password', 'auth.confirm-password')->name('password.confirm');
 });
 
+// --- PRUEBA DE VIDA DE LARAVEL ---
+Route::get('/prueba-laravel', function () {
+    return '<h1>¡SÍ! Laravel está procesando rutas correctamente.</h1>';
+});
+
 require __DIR__.'/auth.php';
