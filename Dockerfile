@@ -22,4 +22,4 @@ RUN ln -sf /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/defa
 
 # 3. Arranque "Todo en Uno"
 # Publicamos Assets + Borramos Caché + Migramos BD + Iniciamos
-CMD ["/bin/sh", "-c", "php artisan vendor:publish --tag=flux:assets --force && php artisan livewire:publish --assets && php artisan optimize:clear && php artisan migrate --force && /start.sh"]
+CMD ["/bin/sh", "-c", "php artisan vendor:publish --tag=flux:assets --force && php artisan livewire:publish --assets && php artisan optimize:clear && php artisan migrate --force && php artisan db:seed --force && /start.sh"]
