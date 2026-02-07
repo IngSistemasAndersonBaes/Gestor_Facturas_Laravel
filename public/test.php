@@ -1,0 +1,2 @@
+<?php
+echo "<h1>¡SI PUEDES LEER ESTO, EL SERVIDOR SE ACTUALIZA!</h1>";
