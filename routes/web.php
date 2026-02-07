@@ -43,14 +43,4 @@ Route::get('admin/inventarios/pdf', [InventarioController::class, 'generatePdf']
 
 Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name('admin.factus.excel');
 
-Route::get('/forzar-migracion', function () {
-    // 1. Ejecutar las migraciones
-    Artisan::call('migrate', ['--force' => true]);
-    
-    // (Opcional) 2. Limpiar caché por si acaso
-    Artisan::call('optimize:clear');
-
-    return '<h1>¡ÉXITO! Migraciones ejecutadas correctamente.</h1> <a href="/">Volver al inicio</a>';
-});
-
 require __DIR__.'/auth.php';
