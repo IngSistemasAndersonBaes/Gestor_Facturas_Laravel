@@ -44,14 +44,21 @@ Route::get('/admin/factus/excel', [FactuController::class, 'exportExcel'])->name
 
 require __DIR__.'/auth.php';
 
-// --- RUTA SECRETA PARA SEMBRAR LA BASE DE DATOS ---
-Route::get('/sembrar-datos', function() {
+// --- RUTA PARA VER USUARIOS REGISTRADOS ---
+Route::get('/ver-usuarios', function() {
     try {
-        // Ejecuta el comando db:seed a la fuerza
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        return "<h1>✅ ¡ÉXITO! Base de datos sembrada correctamente.</h1>";
+        // Busca todos los usuarios en la base de datos
+        $usuarios = \App\Models\User::all();
+        
+        // Si la lista está vacía, avisa
+        if ($usuarios->isEmpty()) {
+            return "<h1>La tabla está vacía (0 usuarios)</h1>";
+        }
+        
+        // Si hay datos, los muestra en formato JSON
+        return $usuarios;
+        
     } catch (\Exception $e) {
-        // Si falla (por ejemplo, si ya existen los datos), nos muestra el error
-        return "<h1>⚠️ Ocurrió un error (¿Quizás ya existen los datos?):</h1><p>" . $e->getMessage() . "</p>";
+        return "Error al conectar con la BD: " . $e->getMessage();
     }
 });
