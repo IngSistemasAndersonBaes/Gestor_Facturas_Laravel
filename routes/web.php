@@ -62,3 +62,14 @@ Route::get('/ver-usuarios', function() {
         return "Error al conectar con la BD: " . $e->getMessage();
     }
 });
+
+// --- RUTA PARA EJECUTAR SEEDERS MANUALMENTE ---
+Route::get('/sembrar-ahora', function() {
+    try {
+        // Ejecutamos el comando db:seed a la fuerza
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        return "<h1>✅ ¡ÉXITO! Seeders ejecutados.</h1><p>Ahora intenta entrar al login.</p>";
+    } catch (\Exception $e) {
+        return "<h1>❌ Error:</h1><p>" . $e->getMessage() . "</p>";
+    }
+});
