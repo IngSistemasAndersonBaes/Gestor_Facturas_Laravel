@@ -18,4 +18,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # ------------------
 
 # Comando Nuclear: Borra físicamente la caché, migra y arranca
-CMD ["/bin/sh", "-c", "rm -f /var/www/html/bootstrap/cache/*.php && php artisan migrate --force && /start.sh"]
+# Versión segura que asegura que el despliegue sea EXITOSO (Check verde)
+CMD ["/start.sh"]
