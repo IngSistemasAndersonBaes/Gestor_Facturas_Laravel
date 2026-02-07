@@ -22,4 +22,4 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN chown -R www-data:www-data /var/www/html
 
 # 4. Comando de arranque: Borra caché, migra BD y enciende
-CMD ["/bin/sh", "-c", "php artisan optimize:clear && php artisan migrate --force && /start.sh"]
+CMD ["/bin/sh", "-c", "php artisan optimize:clear && php artisan livewire:publish --assets && php artisan vendor:publish --tag=flux:assets --force && php artisan migrate --force && /start.sh"]
