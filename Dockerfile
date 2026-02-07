@@ -17,4 +17,4 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 # ------------------
 
-CMD ["/bin/sh", "-c", "php artisan migrate --force && php artisan optimize:clear && /start.sh"]
+CMD ["/bin/sh", "-c", "rm -f /var/www/html/bootstrap/cache/*.php && php artisan migrate --force && php artisan optimize:clear && /start.sh"]
