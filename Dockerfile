@@ -21,5 +21,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # 3. Permisos correctos (Para que Nginx pueda leer los archivos)
 RUN chown -R www-data:www-data /var/www/html
 
-# 4. Comando de arranque: Borra caché, migra BD y enciende
-CMD ["/bin/sh", "-c", "php artisan optimize:clear && php artisan livewire:publish --assets && php artisan vendor:publish --tag=flux:assets --force && php artisan migrate --force && /start.sh"]
+# 2. COMANDO DE ARRANQUE "TODO EN UNO"
+#    - Publica los archivos de Flux y Livewire (Arregla el error de logs)
+#    - Borra TODAS las cachés (Arregla el error 404 del Login)
+#    - Migra la base de datos
+#    - Inicia el servidor
+CMD ["/bin/sh", "-c", "php artisan vendor:publish --tag=flux:assets --force && php artisan livewire:publish --assets && php artisan optimize:clear && php artisan route:clear && php artisan migrate --force && /start.sh"]

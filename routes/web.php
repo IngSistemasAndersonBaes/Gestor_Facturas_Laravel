@@ -34,3 +34,5 @@ Route::middleware('auth')->group(function () {
     Volt::route('verify-email', 'auth.verify-email')->name('verification.notice');
     Volt::route('confirm-password', 'auth.confirm-password')->name('password.confirm');
 });
+
+require __DIR__.'/auth.php';
